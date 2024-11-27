@@ -1,14 +1,18 @@
 package com.maximaseguranca.apibank.service;
 
+import com.maximaseguranca.apibank.dto.UsuarioConsultaResponseDTO;
 import com.maximaseguranca.apibank.dto.UsuarioRequestDTO;
 import com.maximaseguranca.apibank.dto.UsuarioResponseDTO;
 import com.maximaseguranca.apibank.exception.CpfJaCadastradoException;
 import com.maximaseguranca.apibank.exception.UsuarioMenorDeIdadeException;
+import com.maximaseguranca.apibank.exception.UsuarioNaoEncontradoException;
 import com.maximaseguranca.apibank.model.Usuario;
 import com.maximaseguranca.apibank.repository.UsuarioDAO;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UsuarioService {
@@ -43,4 +47,21 @@ public class UsuarioService {
         );
     }
 
+    public Optional<UsuarioConsultaResponseDTO> buscarPorId(Long id) {
+        Optional<Usuario> usuarioOptional = usuarioDAO.buscarPorId(id);
+        if (usuarioOptional.isEmpty()) {
+            throw new UsuarioNaoEncontradoException("Usuário com id " + id + " não encontrado.");
+        }
+        Usuario usuario = usuarioOptional.get();
+
+        UsuarioConsultaResponseDTO usuarioConsultaResponseDTO = new UsuarioConsultaResponseDTO(
+                usuario.getNome(),
+                usuario.getIdade(),
+                usuario.getCpf(),
+                usuario.getNumeroConta(),
+                usuario.getSaldo()
+        );
+
+        return Optional.of(usuarioConsultaResponseDTO);
+    }
 }
