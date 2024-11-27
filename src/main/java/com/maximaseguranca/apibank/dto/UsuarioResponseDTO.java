@@ -1,34 +1,23 @@
-package com.maximaseguranca.apibank.model;
-
-import jakarta.persistence.*;
+package com.maximaseguranca.apibank.dto;
 
 import java.math.BigDecimal;
-import java.util.Random;
 
-@Entity
-@Table(name = "usuarios")
-public class Usuario {
+public class UsuarioResponseDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
-    private int idade; private String cpf;
+    private int idade;
+    private String cpf;
     private String numeroConta;
     private BigDecimal saldo;
 
-    {
-        this.saldo = BigDecimal.ZERO;
-        this.numeroConta = gerarNumeroConta();
-    }
-
-    public Usuario() {
-    }
-
-    public Usuario(String nome, int idade, String cpf) {
+    public UsuarioResponseDTO(Long id, String nome, int idade, String cpf, String numeroConta, BigDecimal saldo) {
+        this.id = id;
         this.nome = nome;
         this.idade = idade;
         this.cpf = cpf;
+        this.numeroConta = numeroConta;
+        this.saldo = saldo;
     }
 
     public Long getId() {
@@ -72,15 +61,10 @@ public class Usuario {
     }
 
     public BigDecimal getSaldo() {
-        return saldo.setScale(2, BigDecimal.ROUND_HALF_UP);
+        return saldo;
     }
 
     public void setSaldo(BigDecimal saldo) {
-        this.saldo = saldo.setScale(2, BigDecimal.ROUND_HALF_UP);
-    }
-
-    private String gerarNumeroConta() {
-        int numeroConta = new Random().nextInt(999999);
-        return String.format("%06d", numeroConta);
+        this.saldo = saldo;
     }
 }
