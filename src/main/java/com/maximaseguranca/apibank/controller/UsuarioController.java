@@ -1,6 +1,5 @@
 package com.maximaseguranca.apibank.controller;
 
-import com.maximaseguranca.apibank.dto.UsuarioConsultaResponseDTO;
 import com.maximaseguranca.apibank.dto.UsuarioRequestDTO;
 import com.maximaseguranca.apibank.dto.UsuarioResponseDTO;
 import com.maximaseguranca.apibank.service.UsuarioService;
@@ -10,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -26,7 +26,13 @@ public class UsuarioController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> buscarUsuarioPorId(@PathVariable Long id) {
-        Optional<UsuarioConsultaResponseDTO> usuarioDTO = usuarioService.buscarPorId(id);
+        Optional<UsuarioResponseDTO> usuarioDTO = usuarioService.buscarPorId(id);
         return ResponseEntity.ok(usuarioDTO.get());
+    }
+
+    @GetMapping
+    public ResponseEntity<List<UsuarioResponseDTO>> listarTodosUsuarios() {
+        List<UsuarioResponseDTO> usuariosDTO = usuarioService.listarTodos();
+        return ResponseEntity.ok(usuariosDTO);
     }
 }

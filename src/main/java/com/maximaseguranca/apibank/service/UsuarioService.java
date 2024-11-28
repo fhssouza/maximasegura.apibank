@@ -1,6 +1,5 @@
 package com.maximaseguranca.apibank.service;
 
-import com.maximaseguranca.apibank.dto.UsuarioConsultaResponseDTO;
 import com.maximaseguranca.apibank.dto.UsuarioRequestDTO;
 import com.maximaseguranca.apibank.dto.UsuarioResponseDTO;
 import com.maximaseguranca.apibank.exception.CpfJaCadastradoException;
@@ -12,7 +11,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UsuarioService {
@@ -47,14 +48,15 @@ public class UsuarioService {
         );
     }
 
-    public Optional<UsuarioConsultaResponseDTO> buscarPorId(Long id) {
+    public Optional<UsuarioResponseDTO> buscarPorId(Long id) {
         Optional<Usuario> usuarioOptional = usuarioDAO.buscarPorId(id);
         if (usuarioOptional.isEmpty()) {
             throw new UsuarioNaoEncontradoException("Usuário com id " + id + " não encontrado.");
         }
         Usuario usuario = usuarioOptional.get();
 
-        UsuarioConsultaResponseDTO usuarioConsultaResponseDTO = new UsuarioConsultaResponseDTO(
+        UsuarioResponseDTO usuarioResponseDTO = new UsuarioResponseDTO(
+                usuario.getId(),
                 usuario.getNome(),
                 usuario.getIdade(),
                 usuario.getCpf(),
@@ -62,6 +64,18 @@ public class UsuarioService {
                 usuario.getSaldo()
         );
 
-        return Optional.of(usuarioConsultaResponseDTO);
+        return Optional.of(usuarioResponseDTO);
+    }
+
+    public List<UsuarioResponseDTO> listarTodos() {
+        List<Usuario> usuarios = usuarioDAO.listarTodos();
+        return usuarios.stream().map(usuario -> new UsuarioResponseDTO(
+                usuario.getId(),
+                usuario.getNome(),
+                usuario.getIdade(),
+                usuario.getCpf(),
+                usuario.getNumeroConta(),
+                usuario.getSaldo()
+        )).collect(Collectors.toList());
     }
 }

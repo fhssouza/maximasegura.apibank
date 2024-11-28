@@ -50,4 +50,11 @@ public class UsuarioDAOImpl implements UsuarioDAO {
             return Optional.empty();
         }
     }
+
+    @Override
+    public List<Usuario> listarTodos() {
+        String sql = "SELECT * FROM usuarios";
+        return entityManager.createNativeQuery(sql, Usuario.class)
+                .getResultList();
+    }
 }
