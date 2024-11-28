@@ -29,18 +29,25 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleUsuarioNaoEncontradoException(UsuarioNaoEncontradoException ex) {
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("error", ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ContaNaoEncontradaException.class)
     public ResponseEntity<Map<String, String>> handleContaNaoEncontradaException(ContaNaoEncontradaException ex) {
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("error", ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ValorInvalidoException.class)
     public ResponseEntity<Map<String, String>> handleValorInvalidoExceptio(ValorInvalidoException ex) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(SaldoInsuficienteException.class)
+    public ResponseEntity<Map<String, String>> handleSaldoInsuficienteException(SaldoInsuficienteException ex) {
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("error", ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
