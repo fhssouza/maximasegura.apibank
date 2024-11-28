@@ -3,12 +3,12 @@ package com.maximaseguranca.apibank.dto;
 import java.math.BigDecimal;
 
 
-public class UsuarioDepositoRequestDTO {
+public class DepositoRequestDTO {
 
     private String numeroConta;
     private BigDecimal valor;
 
-    public UsuarioDepositoRequestDTO(String numeroConta, BigDecimal valor) {
+    public DepositoRequestDTO(String numeroConta, BigDecimal valor) {
         this.numeroConta = numeroConta;
         this.valor = valor;
     }

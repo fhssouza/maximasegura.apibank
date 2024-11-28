@@ -4,7 +4,6 @@ import com.maximaseguranca.apibank.model.Usuario;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -59,32 +58,4 @@ public class UsuarioDAOImpl implements UsuarioDAO {
                 .getResultList();
     }
 
-    @Override
-    public void realizarDeposito(Usuario usuario) {
-
-        String sql = "UPDATE usuarios SET saldo = saldo + :valor WHERE numero_conta = :numeroConta";
-
-        Query query = entityManager.createNativeQuery(sql);
-        query.setParameter("numeroConta", usuario.getNumeroConta());
-        query.setParameter("valor", usuario.getSaldo());
-
-        query.executeUpdate();
-
-    }
-
-    @Override
-    public Optional<Usuario> buscarPorNumeroConta(String numeroConta) {
-        String sql = "SELECT * FROM usuarios WHERE numero_conta = :numeroConta";
-        try {
-            List<Usuario> usuarios = entityManager.createNativeQuery(sql, Usuario.class)
-                    .setParameter("numeroConta", numeroConta)
-                    .getResultList();
-            if (usuarios.isEmpty()) {
-                return Optional.empty();
-            }
-            return Optional.of(usuarios.get(0));
-        } catch (Exception e) {
-            return Optional.empty();
-        }
-    }
 }
