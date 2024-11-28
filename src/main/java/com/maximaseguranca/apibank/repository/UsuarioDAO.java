@@ -10,4 +10,6 @@ public interface UsuarioDAO {
     Optional<Usuario> buscarPorCpf(String cpf);
     Optional<Usuario> buscarPorId(Long id);
     List<Usuario> listarTodos();
+    void realizarDeposito(Usuario usuario);
+    Optional<Usuario> buscarPorNumeroConta(String numeroConta);
 }

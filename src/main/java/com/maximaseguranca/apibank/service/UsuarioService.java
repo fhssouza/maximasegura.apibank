@@ -1,16 +1,16 @@
 package com.maximaseguranca.apibank.service;
 
+import com.maximaseguranca.apibank.dto.UsuarioDepositoRequestDTO;
 import com.maximaseguranca.apibank.dto.UsuarioRequestDTO;
 import com.maximaseguranca.apibank.dto.UsuarioResponseDTO;
-import com.maximaseguranca.apibank.exception.CpfJaCadastradoException;
-import com.maximaseguranca.apibank.exception.UsuarioMenorDeIdadeException;
-import com.maximaseguranca.apibank.exception.UsuarioNaoEncontradoException;
+import com.maximaseguranca.apibank.exception.*;
 import com.maximaseguranca.apibank.model.Usuario;
 import com.maximaseguranca.apibank.repository.UsuarioDAO;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -77,5 +77,25 @@ public class UsuarioService {
                 usuario.getNumeroConta(),
                 usuario.getSaldo()
         )).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void realizarDeposito(UsuarioDepositoRequestDTO depositoRequestDTO) {
+
+        if (depositoRequestDTO.getValor().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new ValorInvalidoException("O valor do depósito deve ser maior que 0.00.");
+        }
+
+        Optional<Usuario> usuarioOptional = usuarioDAO.buscarPorNumeroConta(depositoRequestDTO.getNumeroConta());
+
+        if (usuarioOptional.isEmpty()) {
+            throw new ContaNaoEncontradaException("Conta com número " + depositoRequestDTO.getNumeroConta() + " não encontrada.");
+        }
+
+        Usuario deposito = new Usuario();
+        deposito.setNumeroConta(depositoRequestDTO.getNumeroConta());
+        deposito.setSaldo(depositoRequestDTO.getValor());
+
+        usuarioDAO.realizarDeposito(deposito);
     }
 }

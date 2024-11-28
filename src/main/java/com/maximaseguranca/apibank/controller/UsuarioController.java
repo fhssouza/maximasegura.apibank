@@ -1,5 +1,6 @@
 package com.maximaseguranca.apibank.controller;
 
+import com.maximaseguranca.apibank.dto.UsuarioDepositoRequestDTO;
 import com.maximaseguranca.apibank.dto.UsuarioRequestDTO;
 import com.maximaseguranca.apibank.dto.UsuarioResponseDTO;
 import com.maximaseguranca.apibank.service.UsuarioService;
@@ -34,5 +35,11 @@ public class UsuarioController {
     public ResponseEntity<List<UsuarioResponseDTO>> listarTodosUsuarios() {
         List<UsuarioResponseDTO> usuariosDTO = usuarioService.listarTodos();
         return ResponseEntity.ok(usuariosDTO);
+    }
+
+    @PostMapping("/depositos")
+    public ResponseEntity<String> realizarDeposito(@RequestBody UsuarioDepositoRequestDTO depositoRequestDTO) {
+        usuarioService.realizarDeposito(depositoRequestDTO);
+        return ResponseEntity.ok("Depósito realizado com sucesso.");
     }
 }
