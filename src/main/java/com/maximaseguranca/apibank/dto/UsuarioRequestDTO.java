@@ -13,6 +13,12 @@ public class UsuarioRequestDTO {
     @Schema(description="CPF do Usuario", example = "123.456.789-10")
     private String cpf;
 
+    public UsuarioRequestDTO(String nome, int idade, String cpf) {
+        this.nome = nome;
+        this.idade = idade;
+        this.cpf = cpf;
+    }
+
     public String getNome() {
         return nome;
     }
