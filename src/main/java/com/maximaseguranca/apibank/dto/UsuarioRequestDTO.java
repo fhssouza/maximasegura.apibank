@@ -1,20 +1,16 @@
 package com.maximaseguranca.apibank.dto;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 public class UsuarioRequestDTO {
 
-    @NotNull(message = "O nome é obrigatório.")
-    @Size(min = 1, max = 100, message = "O nome deve ter entre 1 e 100 caracteres.")
+    @Schema(description="Nome do Usuario", example = "João Silva")
     private String nome;
 
-    @Positive(message = "A idade deve ser maior que zero.")
+    @Schema(description="Idade do Usuario", example = "25")
     private int idade;
 
-    @NotNull(message = "O CPF é obrigatório.")
-    @Size(min = 11, max = 14, message = "O CPF deve ter entre 11 e 14 caracteres.")
+    @Schema(description="CPF do Usuario", example = "123.456.789-10")
     private String cpf;
 
     public String getNome() {
