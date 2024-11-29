@@ -1,6 +1,7 @@
 package com.maximaseguranca.apibank.service;
 
 import com.maximaseguranca.apibank.dto.DepositoRequestDTO;
+import com.maximaseguranca.apibank.dto.SaqueRequestDTO;
 import com.maximaseguranca.apibank.dto.TransferenciaRequestDTO;
 import com.maximaseguranca.apibank.exception.ContaNaoEncontradaException;
 import com.maximaseguranca.apibank.exception.SaldoInsuficienteException;
@@ -34,6 +35,26 @@ public class TransacaoService {
         }
 
         transacaoDAO.realizarDeposito(depositoRequestDTO.getNumeroConta(), depositoRequestDTO.getValor());
+    }
+
+    @Transactional
+    public void realizarSaque(SaqueRequestDTO saqueRequestDTO) {
+
+        if (saqueRequestDTO.getValor().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new ValorInvalidoException("O valor do saque deve ser maior que 0.00.");
+        }
+
+        if (saqueRequestDTO.getValor().compareTo(BigDecimal.ZERO) < 0) {
+            throw new SaldoInsuficienteException("Saldo insuficiente para a transferência.");
+        }
+
+        Optional<Usuario> usuarioOptional = transacaoDAO.buscarPorNumeroConta(saqueRequestDTO.getNumeroConta());
+
+        if (usuarioOptional.isEmpty()) {
+            throw new ContaNaoEncontradaException("Conta com número " + saqueRequestDTO.getNumeroConta() + " não encontrada.");
+        }
+
+        transacaoDAO.realizarSaque(saqueRequestDTO.getNumeroConta(), saqueRequestDTO.getValor());
     }
 
     @Transactional

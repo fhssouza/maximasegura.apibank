@@ -28,6 +28,17 @@ public class TransacaoDAOImpl implements TransacaoDAO {
     }
 
     @Override
+    public void realizarSaque(String numeroConta, BigDecimal valor) {
+        String sql = "UPDATE usuarios SET saldo = saldo - :valor WHERE numero_conta = :numeroConta";
+
+        Query query = entityManager.createNativeQuery(sql);
+        query.setParameter("numeroConta", numeroConta);
+        query.setParameter("valor", valor);
+
+        query.executeUpdate();
+    }
+
+    @Override
     public void debitarSaldo(String numeroContaOrigem, BigDecimal valor) {
         String sql = "UPDATE usuarios SET saldo = saldo - :valor WHERE numero_conta = :numeroContaOrigem";
 

@@ -1,6 +1,7 @@
 package com.maximaseguranca.apibank.controller;
 
 import com.maximaseguranca.apibank.dto.DepositoRequestDTO;
+import com.maximaseguranca.apibank.dto.SaqueRequestDTO;
 import com.maximaseguranca.apibank.dto.TransferenciaRequestDTO;
 import com.maximaseguranca.apibank.service.TransacaoService;
 import com.maximaseguranca.apibank.service.UsuarioService;
@@ -36,6 +37,18 @@ public class TransacaoController {
     public ResponseEntity<String> realizarDeposito(@RequestBody DepositoRequestDTO depositoRequestDTO) {
         transacaoService.realizarDeposito(depositoRequestDTO);
         return ResponseEntity.ok("Depósito realizado com sucesso.");
+    }
+
+    @Operation(summary = "Realizar saque")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Saque realizado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos, valor de saque inválido e Saldo insuficiente"),
+            @ApiResponse(responseCode = "404", description = "Conta não encontrada")
+    })
+    @PostMapping("/withdraw")
+    public ResponseEntity<String> realizarSaque(@RequestBody SaqueRequestDTO saqueRequestDTO) {
+        transacaoService.realizarSaque(saqueRequestDTO);
+        return ResponseEntity.ok("Saque realizado com sucesso.");
     }
 
     @Operation(summary = "Realizar transferência")
