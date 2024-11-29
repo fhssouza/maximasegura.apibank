@@ -50,7 +50,7 @@ public class TransacaoService {
         }
 
         Usuario contaOrigem = contaOrigemOpt.get();
-        if (transferenciaRequestDTO.getValor().compareTo(BigDecimal.ZERO) <= 0) {
+        if (contaOrigem.getSaldo().compareTo(transferenciaRequestDTO.getValor()) < 0) {
             throw new SaldoInsuficienteException("Saldo insuficiente para a transferência.");
         }
 
